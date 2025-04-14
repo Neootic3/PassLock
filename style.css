@@ -117,6 +117,8 @@ label {
 .pass-list {
   margin-top: 1.5rem;
   text-align: left;
+  word-break: break-all;
+  max-width: 100%;
 }
 
 .disclaimer {
