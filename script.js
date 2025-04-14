@@ -7,6 +7,7 @@ const passList = document.querySelector('.pass-list');
 // Load saved passwords from local storage
 function createPasswordEntry(name, password) {
   const passEntry = document.createElement('div');
+  passEntry.classList.add('password-entry');
   passEntry.style.display = 'flex';
   passEntry.style.alignItems = 'center';
   passEntry.style.justifyContent = 'space-between';
@@ -37,7 +38,7 @@ function loadSavedPasswords() {
 
 // Save passwords to local storage
 function savePasswords() {
-  const entries = Array.from(passList.querySelectorAll('div')).filter(div => div.querySelector('.password-text'));
+  const entries = Array.from(passList.querySelectorAll('.password-entry'));
   const passwords = entries.map(entry => ({
     name: entry.querySelector('strong').textContent.slice(0, -1),
     password: entry.querySelector('.password-text').textContent
