@@ -1,4 +1,3 @@
-
 const popupBtn = document.getElementById('popup-btn');
 const popup = document.getElementById('popup');
 const generateBtn = document.getElementById('generate-btn');
@@ -7,7 +6,6 @@ const passList = document.querySelector('.pass-list');
 // Load saved passwords from local storage
 function createPasswordEntry(name, password) {
   const passEntry = document.createElement('div');
-  passEntry.classList.add('password-entry');
   passEntry.style.display = 'flex';
   passEntry.style.alignItems = 'center';
   passEntry.style.justifyContent = 'space-between';
@@ -38,7 +36,7 @@ function loadSavedPasswords() {
 
 // Save passwords to local storage
 function savePasswords() {
-  const entries = Array.from(passList.querySelectorAll('.password-entry'));
+  const entries = Array.from(passList.querySelectorAll('div')).filter(div => div.querySelector('.password-text'));
   const passwords = entries.map(entry => ({
     name: entry.querySelector('strong').textContent.slice(0, -1),
     password: entry.querySelector('.password-text').textContent
@@ -91,13 +89,13 @@ function showError(element, message) {
   const errorDiv = document.createElement('div');
   errorDiv.className = 'error-message show';
   errorDiv.textContent = message;
-  
+
   // Remove existing error message if any
   const existingError = element.nextElementSibling;
   if (existingError && existingError.classList.contains('error-message')) {
     existingError.remove();
   }
-  
+
   element.parentNode.insertBefore(errorDiv, element.nextElementSibling);
 }
 
@@ -155,14 +153,32 @@ generateBtn.addEventListener('click', () => {
   }
 
   const password = generatePassword(length, type);
-  
+
   createPasswordEntry(name, password);
-  
+
   // Save to local storage
   savePasswords();
-  
+
   // Clear form and close popup
   document.getElementById('pass_name').value = '';
   document.querySelector('.length_input').value = '';
   popup.style.display = 'none';
+});
+
+const toggleBtn = document.getElementById('toggle-btn');
+let passwordsVisible = true;
+
+// Toggle password visibility
+toggleBtn.addEventListener('click', () => {
+  passwordsVisible = !passwordsVisible;
+  const passwords = document.querySelectorAll('.password-text');
+  passwords.forEach(pass => {
+    if (passwordsVisible) {
+      pass.classList.remove('hidden-password');
+      toggleBtn.innerHTML = '<i class="fas fa-eye"></i> Show/Hide Passwords';
+    } else {
+      pass.classList.add('hidden-password');
+      toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Show/Hide Passwords';
+    }
+  });
 });
