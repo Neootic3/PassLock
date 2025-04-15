@@ -45,6 +45,25 @@ body {
   background: #1557b0;
 }
 
+.toggle-visibility {
+  background: #4285f4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 0 1rem 1rem;
+  transition: background 0.3s;
+}
+
+.toggle-visibility:hover {
+  background: #3367d6;
+}
+
+.hidden-password {
+  filter: blur(4px);
+}
+
 .popup {
   display: none;
   background: white;
