@@ -1,4 +1,3 @@
-
 const popupBtn = document.getElementById('popup-btn');
 const popup = document.getElementById('popup');
 const generateBtn = document.getElementById('generate-btn');
@@ -57,33 +56,38 @@ function dismissWarning() {
   }
 }
 
-// Characters for different password types
-const chars = {
-  weak: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
-  medium: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*',
-  strong: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?'
-};
-
-// Show popup
-popupBtn.addEventListener('click', () => {
-  popup.style.display = 'block';
-});
-
-// Close popup when clicking outside
-window.addEventListener('click', (e) => {
-  if (e.target === popup) {
-    popup.style.display = 'none';
-  }
-});
+// Word lists for password generation
+const words = [
+  'Blue', 'Red', 'Green', 'Gold', 'Silver', 'Black', 'White',
+  'Tiger', 'Lion', 'Eagle', 'Wolf', 'Bear', 'Dragon', 'Phoenix',
+  'Star', 'Moon', 'Sun', 'Sky', 'Ocean', 'Mountain', 'Forest',
+  'Crystal', 'Diamond', 'Ruby', 'Sapphire', 'Emerald'
+];
 
 // Generate password
 function generatePassword(length, type) {
-  let password = '';
-  const characters = chars[type];
-  for (let i = 0; i < length; i++) {
-    password += characters.charAt(Math.floor(Math.random() * characters.length));
+  if (type === 'weak') {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let password = '';
+    for (let i = 0; i < length; i++) {
+      password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return password;
+  } else if (type === 'medium') {
+    // Generate word combination with underscore
+    const word1 = words[Math.floor(Math.random() * words.length)];
+    const word2 = words[Math.floor(Math.random() * words.length)];
+    const number = Math.floor(Math.random() * 1000);
+    return `${word1}_${number}_${word2}`;
+  } else {
+    // Strong type with date
+    const word1 = words[Math.floor(Math.random() * words.length)];
+    const word2 = words[Math.floor(Math.random() * words.length)];
+    const specialChars = '!@#$%^&*';
+    const special = specialChars.charAt(Math.floor(Math.random() * specialChars.length));
+    const date = new Date().toISOString().slice(0,10).replace(/-/g,'');
+    return `${word1}_${special}_${word2}_${date}`;
   }
-  return password;
 }
 
 function showError(element, message) {
@@ -91,13 +95,13 @@ function showError(element, message) {
   const errorDiv = document.createElement('div');
   errorDiv.className = 'error-message show';
   errorDiv.textContent = message;
-  
+
   // Remove existing error message if any
   const existingError = element.nextElementSibling;
   if (existingError && existingError.classList.contains('error-message')) {
     existingError.remove();
   }
-  
+
   element.parentNode.insertBefore(errorDiv, element.nextElementSibling);
 }
 
@@ -125,6 +129,17 @@ function deletePassword(button) {
   }
   savePasswords();
 }
+
+// Show popup
+popupBtn.addEventListener('click', () => {
+  popup.style.display = 'block';
+});
+// Close popup when clicking outside
+window.addEventListener('click', (e) => {
+  if (e.target === popup) {
+    popup.style.display = 'none';
+  }
+});
 
 // Handle password generation
 generateBtn.addEventListener('click', () => {
@@ -155,12 +170,12 @@ generateBtn.addEventListener('click', () => {
   }
 
   const password = generatePassword(length, type);
-  
+
   createPasswordEntry(name, password);
-  
+
   // Save to local storage
   savePasswords();
-  
+
   // Clear form and close popup
   document.getElementById('pass_name').value = '';
   document.querySelector('.length_input').value = '';
