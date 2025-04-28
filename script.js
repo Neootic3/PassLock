@@ -269,11 +269,22 @@ function deletePassword(button) {
 popupBtn.addEventListener('click', () => {
   popup.style.display = 'block';
 });
+// Popup Hit
+popup.hit = false;
+popup.addEventListener('click', e => {
+    popup.hit = true;
+})
+
 // Close popup when clicking outside or on close button
 window.addEventListener('click', (e) => {
-  if (e.target === popup) {
-    popup.style.display = 'none';
-  }
+    // Allows it to open (obviously when hitting the button the popup is not there
+    if (e.target !== popupBtn) {
+        if (!popup.hit) {
+            popup.style.display = 'none';
+        }
+    }
+
+    popup.hit = false;
 });
 
 document.getElementById('close-popup').addEventListener('click', () => {
